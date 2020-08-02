@@ -21,7 +21,7 @@ You need to change the following configuration settings in appconfig.json (make 
 
 #### Defaults
 Change the following defaults in appsettings.config with your base domain name.
-"Defaults": { "Domain": "{{your base domain}}" }`
+`"Defaults": { "Domain": "{{your base domain}}" }`
 
 ### Features in the future versions
 - Support for Docker
