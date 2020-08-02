@@ -32,3 +32,5 @@ Change the following default in appsettings.config with your base domain name. T
 - Support for MySQL, PostGreSQL, and MariaDB
 - Implementation of other admin and configuration sections
 - Implementation of extended link statistics
+- Implementation of referrers (social media, sms, email)
+- 
