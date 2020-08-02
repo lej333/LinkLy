@@ -18,10 +18,12 @@ You need to change the following configuration settings in appconfig.json (make 
 
 #### Connectionstring
 Change the following connectionstring with connectionstring of your SQL Server.
+
 `"ConnectionStrings": { "DefaultConnection": "{{ChangeThisWithConnectionString}}" }`
 
 #### Defaults
-Change the following defaults in appsettings.config with your base domain name.
+Change the following default in appsettings.config with your base domain name.
+
 `"Defaults": { "Domain": "{{your base domain}}" }`
 
 ### Features in the future versions
