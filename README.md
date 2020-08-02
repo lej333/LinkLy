@@ -10,8 +10,8 @@ LinkLy is built with the following techniques.
 - ASP.NET Core MVC 3.1 (C#)
 - Depencency Injection
 - Repository Pattern
-- Entity Framework
-- SQL Server
+- Entity Framework Core
+- Microsoft SQL Server
 
 ### Configurations
 You need to change the following configuration settings in appconfig.json (make a copy of appconfig.example.json).
