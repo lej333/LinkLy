@@ -31,8 +31,9 @@ Change the following default in appsettings.config with your base domain name. T
 - Support for Azure
 - Support for MySQL, PostGreSQL, and MariaDB
 - Implementation of other admin and configuration sections
-- Extended link statistics
+- Extended link statistics (device types, browsers, countries, cities)
 - Referrers (social media, sms, email)
 - Smart domain change/switch
 - API
 - Link tags
+- Webhooks
