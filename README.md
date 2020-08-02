@@ -17,6 +17,7 @@ LinkLy is built with the following techniques.
 You need to change the following configuration settings in appconfig.json (make a copy of appconfig.example.json).
 
 #### Connectionstring
+Change the following connectionstring with connectionstring of your SQL Server.
 `"ConnectionStrings": { "DefaultConnection": "{{ChangeThisWithConnectionString}}" }`
 
 #### Defaults
