@@ -34,3 +34,4 @@ Change the following default in appsettings.config with your base domain name. T
 - Implementation of extended link statistics
 - Implementation of referrers (social media, sms, email)
 - Implementation of smart domain change
+- API
