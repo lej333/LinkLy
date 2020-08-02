@@ -22,7 +22,7 @@ Change the following connectionstring with connectionstring of your SQL Server.
 `"ConnectionStrings": { "DefaultConnection": "{{ChangeThisWithConnectionString}}" }`
 
 #### Defaults
-Change the following default in appsettings.config with your base domain name.
+Change the following default in appsettings.config with your base domain name. This domain name will be used by default for all customers who will use your copy of LinkLy application.
 
 `"Defaults": { "Domain": "{{your base domain}}" }`
 
