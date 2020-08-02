@@ -1,0 +1,56 @@
+﻿@model LinkLy.Models.ViewModels.LinkDetailsViewModel
+@using LinkLy.Extensions
+
+<div>
+    <div class="float-left">
+        <h2 class="text-info">@(Model.Link.Id == 0 ? "New link" : "Edit link")</h2>
+    </div>
+    <div class="float-left ml-3 mt-1">
+        <partial name="_BackButtonPartial" />
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="border container bg-white p-3" style="max-width: 500px;">
+    <form method="post" asp-action="Details">
+        @if (Model.Link.Id != 0)
+        {
+            <input type="hidden" asp-for="Link.Id" />
+        }
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Link.Domain"></label>
+            </div>
+            <div class="col-10">
+                <select id="cboDomains" asp-for="Link.Domain" asp-items="@Model.Domains.ToSelectListItem(Model.Link.Domain)" class="form-control"></select>
+            </div>
+            <span asp-validation-for="Link.Domain" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Link.Name"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="Link.Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Link.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Link.Uri"></label>
+            </div>
+            <div class="col-10">
+                <input asp-for="Link.Uri" class="form-control" />
+            </div>
+            <span asp-validation-for="Link.Uri" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-2">
+                <input type="submit" value="@(Model.Link.Id == 0 ? "Create" : "Save")" class="btn btn-info form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
