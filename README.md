@@ -15,14 +15,13 @@ LinkLy is built with the following techniques.
 
 ### Configurations
 You need to change the following configuration settings in appconfig.json (make a copy of appconfig.example.json).
-`{
-  "ConnectionStrings": {
-    "DefaultConnection": "{{ChangeThisWithConnectionString}}"
-  },
-  "Defaults": {
-    "Domain": "k.swalbe.nl"
-  }
-}`
+
+#### Connectionstring
+`"ConnectionStrings": { "DefaultConnection": "{{ChangeThisWithConnectionString}}" }`
+
+#### Defaults
+Change the following defaults in appsettings.config with your base domain name.
+"Defaults": { "Domain": "{{your base domain}}" }`
 
 ### Features in the future versions
 - Support for Docker
