@@ -36,4 +36,6 @@ Change the following default in appsettings.config with your base domain name. T
 - Smart domain change/switch
 - API
 - Link tags
+- Links archive
 - Webhooks
+
