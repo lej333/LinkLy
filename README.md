@@ -19,7 +19,7 @@ You need to change the following configuration settings in appconfig.json (make 
 #### Connectionstring
 Change the following connectionstring with connectionstring of your SQL Server.
 
-`"ConnectionStrings": { "DefaultConnection": "{{ChangeThisWithConnectionString}}" }`
+`"ConnectionStrings": { "DefaultConnection": "{{change this with connectionstring}}" }`
 
 #### Defaults
 Change the following default in appsettings.config with your base domain name. This domain name will be used by default for all customers who will use your copy of LinkLy application.
