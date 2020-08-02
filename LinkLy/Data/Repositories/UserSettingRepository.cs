@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using LinkLy.Interfaces;
-using LinkLy.Helpers;
 
 namespace Linkly.Data.Repositories
 {
@@ -14,28 +12,26 @@ namespace Linkly.Data.Repositories
     {
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IDefaults _defaults;
 
-        public UserSettingRepository(ApplicationDbContext db, IHttpContextAccessor httpContextAccessor, Defaults defaults) : base(db, httpContextAccessor)
+        public UserSettingRepository(ApplicationDbContext db, IHttpContextAccessor httpContextAccessor) : base(db, httpContextAccessor)
         {
             _db = db;
             _httpContextAccessor = httpContextAccessor;
-            _defaults = defaults;
         }
 
-        public async Task<UserSetting> GetByUser(string userId = "")
+        /// <summary>
+        /// Retrieves user setting for the current logged in user
+        /// Adds a new user setting when not created before (with defaults)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<UserSetting> GetByUserWithDefault()
         {
-            if (userId == "")
-            {
-                userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            }
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             UserSetting userSetting = await _db.UserSettings.FirstOrDefaultAsync(s => s.UserId == userId);
             if (userSetting == null)
             {
-                userSetting = new UserSetting()
-                {
-                    UserId = userId
-                };
+                userSetting = new UserSetting();
                 _db.UserSettings.Add(userSetting);
                 await _db.SaveChangesAsync();
                 userSetting = await _db.UserSettings.FirstOrDefaultAsync(s => s.UserId == userId);

@@ -25,15 +25,12 @@ namespace Linkly.Data.Repositories
 
         /// <summary>
         /// Generates a list with all links created by currently loggedin user, descending sorted by last click
+        /// With search and paging possibility
         /// </summary>
         /// <param name="userId">Possibility to get list of other user instead of the current loggedin user</param>
-        /// TODO: add possibility to override sorting
-        /// TODO: add paging logic
-        public async Task<List<Link>> ToListByUser(string userId = "", string search = "")
+        public async Task<List<Link>> GetPaged(string search = "")
         {
-            if (String.IsNullOrEmpty(userId)) {
-                userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            }
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var links = from l in _db.Links.Include(l => l.Clicks).Where(l => l.UserId == userId).OrderByDescending(l => l.LastClick) 
                         select l;

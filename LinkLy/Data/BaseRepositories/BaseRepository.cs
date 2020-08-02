@@ -17,6 +17,11 @@ namespace LinkLy.Data.BaseRepositories
             _db = db;
         }
 
+        /// <summary>
+        /// Adds one new entity to the database.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task<TEntity> Add(TEntity entity)
         {
             entity.CreationDate = DateTime.Now;
@@ -25,6 +30,11 @@ namespace LinkLy.Data.BaseRepositories
             return entity;
         }
 
+        /// <summary>
+        /// Deletes one entity from database based on its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TEntity> Delete(int id)
         {
             var entity = await _db.Set<TEntity>().FindAsync(id);
@@ -39,16 +49,30 @@ namespace LinkLy.Data.BaseRepositories
             return entity;
         }
 
+        /// <summary>
+        /// Gets one entity from database based on its Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TEntity> Get(int id)
         {
             return await _db.Set<TEntity>().FindAsync(id);
         }
 
+        /// <summary>
+        /// Gets a list with entities.
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<TEntity>> GetAll()
         {
             return await _db.Set<TEntity>().ToListAsync();
         }
 
+        /// <summary>
+        /// Updates one entity to database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<TEntity> Update(TEntity entity)
         {
             _db.Entry(entity).State = EntityState.Modified;

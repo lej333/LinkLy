@@ -4,14 +4,13 @@ using LinkLy.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using LinkLy.Helpers;
 
 namespace Linkly.Data.Repositories
 {
-    public class DomainRepository : BaseUserRepository<UserSetting, ApplicationDbContext>
+    public class DomainRepository : BaseUserRepository<Domain, ApplicationDbContext>
     {
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -24,16 +23,17 @@ namespace Linkly.Data.Repositories
             _defaults = defaults;
         }
 
-        public async Task<List<Domain>> GetByUser(string userId = "")
+        /// <summary>
+        /// This will retrieve a list with all registered domains for the current logged in user
+        /// Adds a new default domain when the current logged in user doesn't have any domain registered
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Domain>> GetAllWithDefault()
         {
-            if (userId == "")
-            {
-                userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            }
-
-            var query = _db.Domains.Where(s => s.UserId == userId);
-            List<Domain> domains = await query.ToListAsync();
+            List<Domain> domains = await GetAll();
             if (domains == null || domains.Count() == 0) {
+                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
                 Domain domain = new Domain()
                 {
                     UserId = userId,
@@ -41,7 +41,7 @@ namespace Linkly.Data.Repositories
                 };
                 _db.Domains.Add(domain);
                 await _db.SaveChangesAsync();
-                domains = await query.ToListAsync();
+                domains = await GetAll();
             };
             return domains;
         }

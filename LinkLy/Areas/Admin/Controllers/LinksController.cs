@@ -24,7 +24,7 @@ namespace LinkLy.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(LinksViewModel model)
         {
-            model.Links = await _linkRepository.ToListByUser(null, model.Search);
+            model.Links = await _linkRepository.GetPaged(model.Search);
             return View(model);
         }
 
@@ -33,7 +33,7 @@ namespace LinkLy.Areas.Admin.Controllers
             LinkDetailsViewModel model = new LinkDetailsViewModel()
             {
                 Link = (id == 0 ? new Link() : await _linkRepository.Get(id)),
-                Domains = await _domainRepository.GetByUser()
+                Domains = await _domainRepository.GetAllWithDefault()
             };
             
             return View(model);
@@ -65,7 +65,7 @@ namespace LinkLy.Areas.Admin.Controllers
                 LinkDetailsViewModel modelState = new LinkDetailsViewModel()
                 {
                     Link = model.Link,
-                    Domains = await _domainRepository.GetByUser()
+                    Domains = await _domainRepository.GetAllWithDefault()
                 };
                 return View(modelState);
             }
