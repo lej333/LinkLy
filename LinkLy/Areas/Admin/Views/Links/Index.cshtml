@@ -1,5 +1,7 @@
-﻿@model LinkLy.Models.ViewModels.LinksViewModel 
+﻿@model LinkLy.Models.ViewModels.LinksViewModel
 @inject LinkLy.Interfaces.IShortner shortner
+
+<div class="container">
 
     <div>
         <div class="float-left">
@@ -14,7 +16,7 @@
         <div class="float-right">
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 bg-white" _lpchecked="1">
                 <div class="input-group">
-                    <input type="text" id="Search" name="Search" class="form-control bg-white border-0 small" placeholder="Search in links" aria-label="Search" aria-describedby="basic-addon2" value="@Model.Search" />
+                    <input type="text" id="Search" name="Search" class="form-control bg-white border-0 small" placeholder="Search in links" aria-label="Search" aria-describedby="basic-addon2" value="@ViewData["CurrentSearch"]" />
                     <div class="input-group-append">
                         <button class="btn btn-info" type="submit">
                             <i class="fas fa-search fa-sm"></i>
@@ -25,17 +27,16 @@
         </div>
         <div class="clearfix"></div>
     </div>
-    
 
     @if (Model.Links.Count() != 0)
     {
-        <div class="bg-white mt-2">
+        <div class="bg-white mt-2 shadow">
             <table class="table table-striped border mb-0">
                 @foreach (var item in Model.Links)
                 {
                     <tr>
                         <td>
-                            <div>
+                            <div class="p-1">
                                 <div>
                                     <div class="text-nowrap float-left">
                                         @Html.DisplayFor(m => item.Name)
@@ -55,10 +56,10 @@
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                            
+
                                 <div class="overflow-hidden text-nowrap">
                                     <a href="@item.Uri" target="_blank" class="text-gray-900">
-                                        @Html.DisplayFor(m => item.Uri)
+                                        @item.Uri
                                     </a>
                                 </div>
 
@@ -69,8 +70,14 @@
                                 </div>
 
                                 <div class="text-gray-500 small">
-                                    <span title="@item.CreationDate.ToString("dd-MM-yyyy HH:mm")">Creation: <b>@item.CreationDate.ToString("d MMM")</b></span> - <span title="@item.LastClick.ToString("dd-MM-yyyy HH:mm")">Last click: <b>@item.LastClick.ToString("d MMM")</b></span><br />
-                                    Clicks: total: <b>@item.Clicks.Count()</b>, past year: <b>@item.CalculateClicks(365)</b>, past month: <b>@item.CalculateClicks(31)</b>, past day: <b>@item.CalculateClicks(1)</b>
+                                    <span title="@item.CreationDate.ToString("dd-MM-yyyy HH:mm")">Creation: <b>@item.CreationDate.ToString("d MMM")</b></span>
+                                    @if (item.LastClick != null)
+                                    {
+                                        <div>
+                                            <span title="@item.LastClick.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm")">Last click: <b>@item.LastClick.GetValueOrDefault().ToString("d MMM")</b></span>
+                                            Clicks: total: <b>@item.Clicks.Count()</b>, past year: <b>@Model.CalculateClicks(365, item.Clicks)</b>, past month: <b>@Model.CalculateClicks(31, item.Clicks)</b>, past day: <b>@Model.CalculateClicks(1, item.Clicks)</b>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </td>
@@ -78,9 +85,37 @@
                 }
             </table>
         </div>
-    } else {
-        <div class="bg-white border p-3 mt-2">
+        <div>
+
+            @{
+                string prevDisabled = !Model.Paged.HasPreviousPage ? "disabled" : "";
+                string nextDisabled = !Model.Paged.HasNextPage ? "disabled" : "";
+            }
+
+            <div class="float-right mt-2">
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.Paged.PageIndex - 1)"
+                   asp-route-currentSearch="@ViewData["CurrentSearch"]"
+                   class="btn btn-default btn-circle btn-outline-dark @prevDisabled">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.Paged.PageIndex + 1)"
+                   asp-route-currentSearch="@ViewData["CurrentSearch"]"
+                   class="btn btn-default btn-circle btn-outline-dark ml-1 @nextDisabled">
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    }
+    else
+    {
+        <div class="bg-white border p-3 mt-2 shadow">
             <h3>No links</h3>
             No links are available or found based on your search criteria (<a asp-action="Index">clear</a>).
         </div>
     }
+
+</div>

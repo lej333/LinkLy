@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using LinkLy.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
 
-namespace LinkLy.Models
+namespace LinkLy.Models.DataModels
 {
     public class Link : IUserEntity
     {
@@ -35,7 +34,7 @@ namespace LinkLy.Models
 
         [Column("last_click")]
         [DisplayName("Last click")]
-        public DateTime LastClick { get; set; }
+        public DateTime? LastClick { get; set; }
 
         [Column("creation_date")]
         [DisplayName("Creationdate")]
@@ -50,13 +49,5 @@ namespace LinkLy.Models
         public IdentityUser User { get; set; }
 
         public List<Click> Clicks { get; set; }
-
-        public int CalculateClicks(int days) {
-            if (Clicks == null) {
-                return 0;
-            }
-
-            return (from c in Clicks where c.CreationDate >= DateTime.Now.AddDays(-days) select c.Id).Count();
-        }
     }
 }

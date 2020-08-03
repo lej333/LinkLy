@@ -22,7 +22,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<TEntity> Add(TEntity entity)
+        public virtual async Task<TEntity> Add(TEntity entity)
         {
             entity.CreationDate = DateTime.Now;
             _db.Set<TEntity>().Add(entity);
@@ -35,7 +35,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TEntity> Delete(int id)
+        public virtual async Task<TEntity> Delete(int id)
         {
             var entity = await _db.Set<TEntity>().FindAsync(id);
             if (entity == null)
@@ -54,7 +54,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TEntity> Get(int id)
+        public virtual async Task<TEntity> Get(int id)
         {
             return await _db.Set<TEntity>().FindAsync(id);
         }
@@ -63,7 +63,7 @@ namespace LinkLy.Data.BaseRepositories
         /// Gets a list with entities.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<TEntity>> GetAll()
+        public virtual async Task<List<TEntity>> GetAll()
         {
             return await _db.Set<TEntity>().ToListAsync();
         }
@@ -73,7 +73,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TEntity> Update(TEntity entity)
+        public virtual async Task<TEntity> Update(TEntity entity)
         {
             _db.Entry(entity).State = EntityState.Modified;
             await _db.SaveChangesAsync();
