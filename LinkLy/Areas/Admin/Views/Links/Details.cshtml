@@ -1,56 +1,371 @@
 ﻿@model LinkLy.Models.ViewModels.LinkDetailsViewModel
 @using LinkLy.Extensions
 
-<div>
-    <div class="float-left">
-        <h2 class="text-info">@(Model.Link.Id == 0 ? "New link" : "Edit link")</h2>
+    <div class="container">
+
+        <div>
+            <div class="float-left">
+                <h2 class="text-info">Link</h2>
+            </div>
+            <div class="float-right">
+                <partial name="_BackButtonPartial" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="@(Model.Link.Id > 0 ? "col-xl-8" : "col-xl-12")">
+
+                <!-- Details form -->
+                <div class="card border shadow p-4 pb-2 mb-4">
+
+                    <form method="post" asp-action="Details">
+                        @if (Model.Link.Id > 0)
+                        {
+                            <input type="hidden" asp-for="Link.Id" />
+                        }
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label asp-for="Link.Domain"></label>
+                            </div>
+                            <div class="col-10">
+                                <select id="cboDomains" asp-for="Link.Domain" asp-items="@Model.Domains.ToSelectListItem(Model.Link.Domain)" class="form-control"></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label asp-for="Link.Name"></label>
+                            </div>
+                            <div class="col-10">
+                                <input asp-for="Link.Name" class="form-control" />
+                                <span asp-validation-for="Link.Name" class="text-danger mt-1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label asp-for="Link.Uri"></label>
+                            </div>
+                            <div class="col-10">
+                                <input asp-for="Link.Uri" class="form-control" />
+                                <span asp-validation-for="Link.Uri" class="text-danger mt-1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-3 offset-2">
+                                <input type="submit" value="@(Model.Link.Id == 0 ? "Create" : "Save")" class="btn btn-info form-control" />
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+                @if (Model.Link.Id > 0)
+                { 
+                    <!-- Months area chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Clicks</h6>
+                        </div>
+                        <div class="card-body">
+                            @if (Model.ClicksValues == "[0,0,0,0,0,0,0,0,0,0,0,0]")
+                            {
+                                <div class="text-gray-500">
+                                    There are no data available yet
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="chart-area">
+                                    <canvas id="chartClicks"></canvas>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Total clicks label -->
+                        <div class="col-xl-6">
+                            <div class="card shadow py-2 mb-4">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total clicks</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Link.Clicks.Count</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-link fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Last click date label -->
+                        <div class="col-xl-6">
+                            <div class="card shadow py-2 mb-4">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Last click</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Link.LastClick == null ? "Not clicked yet" : Model.Link.LastClick.GetValueOrDefault().ToString("d MMM yyyy HH:mm"))</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            @if (Model.Link.Id > 0)
+            {
+                <div class="col-xl-4 mb-4">
+
+                    <!-- Countries chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Countries</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.CountriesValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else 
+                                { 
+                                    <div class="chart-pie">
+                                        <canvas id="chartCountries"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Device Types chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Devices</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.DeviceTypesValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="chart-pie">
+                                        <canvas id="chartDeviceTypes"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Browsers chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Browsers</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.BrowsersValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="chart-pie">
+                                        <canvas id="chartBrowsers"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
     </div>
-    <div class="float-left ml-3 mt-1">
-        <partial name="_BackButtonPartial" />
-    </div>
-    <div class="clearfix"></div>
-</div>
 
-<div class="border container bg-white p-3" style="max-width: 500px;">
-    <form method="post" asp-action="Details">
-        @if (Model.Link.Id != 0)
-        {
-            <input type="hidden" asp-for="Link.Id" />
-        }
-        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Link.Domain"></label>
-            </div>
-            <div class="col-10">
-                <select id="cboDomains" asp-for="Link.Domain" asp-items="@Model.Domains.ToSelectListItem(Model.Link.Domain)" class="form-control"></select>
-            </div>
-            <span asp-validation-for="Link.Domain" class="text-danger"></span>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Link.Name"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Link.Name" class="form-control" />
-            </div>
-            <span asp-validation-for="Link.Name" class="text-danger"></span>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Link.Uri"></label>
-            </div>
-            <div class="col-10">
-                <input asp-for="Link.Uri" class="form-control" />
-            </div>
-            <span asp-validation-for="Link.Uri" class="text-danger"></span>
-        </div>
-        <div class="form-group row">
-            <div class="col-3 offset-2">
-                <input type="submit" value="@(Model.Link.Id == 0 ? "Create" : "Save")" class="btn btn-info form-control" />
-            </div>
-        </div>
-    </form>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="/lib/chart.js/Chart.min.js"></script>
 
+    <script type="text/javascript">
+        window.onload = function () {
+            Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.global.defaultFontColor = '#858796';
 
+            var options = {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+            legend: {
+                display: true
+            },
+            cutoutPercentage: 80,
+        };
+
+        var backgroundColors = ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796', '#5a5c69'];
+        var hoverBackgroundColors = ['#2e59d9', '#17a673', '#2c9faf', '#f4b820', '#e33221', '#757888', '#51525e'];
+
+        var cCountries = document.getElementById("chartCountries");
+        new Chart(cCountries, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Model.CountriesLabels),
+                datasets: [{
+                    data: @Html.Raw(Model.CountriesValues),
+                    backgroundColor: backgroundColors,
+                    hoverBackgroundColor: hoverBackgroundColors,
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: options,
+        });
+
+        var cDeviceTypes = document.getElementById("chartDeviceTypes");
+        new Chart(cDeviceTypes, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Model.DeviceTypesLabels),
+                datasets: [{
+                    data: @Html.Raw(Model.DeviceTypesValues),
+                    backgroundColor: backgroundColors,
+                    hoverBackgroundColor: hoverBackgroundColors,
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: options,
+        });
+
+        var cBrowsers = document.getElementById("chartBrowsers");
+        new Chart(cBrowsers, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Model.BrowsersLabels),
+                datasets: [{
+                    data: @Html.Raw(Model.BrowsersValues),
+                    backgroundColor: backgroundColors,
+                    hoverBackgroundColor: hoverBackgroundColors,
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: options,
+        });
+
+        // Data binding for Clicks area chart
+        var cClicks = document.getElementById("chartClicks");
+        new Chart(cClicks, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Model.ClicksLabels),
+                datasets: [{
+                    label: "Clicks",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: @Html.Raw(Model.ClicksValues),
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            callback: function (value, index, values) {
+                                return value;
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                                return datasetLabel + ': ' + tooltipItem.yLabel;
+                            }
+                        }
+                    }
+                }
+            });
+
+        };
+
+    </script>
+}

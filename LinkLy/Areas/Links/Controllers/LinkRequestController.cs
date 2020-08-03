@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using LinkLy.Data;
 using LinkLy.Interfaces;
+using LinkLy.Models.DataModels;
 using LinkLy.Models;
 using Microsoft.AspNetCore.Mvc;
 using Shyjus.BrowserDetection;
 using Shyjus.BrowserDetection.Browsers;
 using System;
+using Linkly.Data.Repositories;
 
 namespace LinkLy.Controllers
 {
@@ -16,12 +18,14 @@ namespace LinkLy.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IShortner _shortner;
         private readonly IVisitor _visitor;
+        private readonly ClickRepository _clickRepository;
 
-        public LinkRequestController(IBrowserDetector browserDetector, ApplicationDbContext db, IShortner shortner, IVisitor visitor) {
+        public LinkRequestController(IBrowserDetector browserDetector, ApplicationDbContext db, IShortner shortner, IVisitor visitor, ClickRepository clickRepository) {
             _browserDetector = browserDetector;
             _db = db;
             _shortner = shortner;
             _visitor = visitor;
+            _clickRepository = clickRepository;
         }
 
         public async Task<IActionResult> Index(string guid, bool register = true)
@@ -57,7 +61,7 @@ namespace LinkLy.Controllers
                 click.Postal = ipInfo.Postal;
                 click.Region = ipInfo.Region;
 
-                await _db.Clicks.AddAsync(click);
+                await _clickRepository.Add(click);
 
                 link.TotalClicks++;
                 link.LastClick = DateTime.Now;

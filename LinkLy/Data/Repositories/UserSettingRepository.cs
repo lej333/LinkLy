@@ -1,4 +1,4 @@
-﻿using LinkLy.Models;
+﻿using LinkLy.Models.DataModels;
 using LinkLy.Data.BaseRepositories;
 using LinkLy.Data;
 using System.Threading.Tasks;

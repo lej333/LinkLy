@@ -1,4 +1,4 @@
-﻿using LinkLy.Models;
+﻿using LinkLy.Models.DataModels;
 using LinkLy.Data.BaseRepositories;
 using LinkLy.Data;
 using System.Collections.Generic;
@@ -24,22 +24,37 @@ namespace Linkly.Data.Repositories
         }
 
         /// <summary>
-        /// Generates a list with all links created by currently loggedin user, descending sorted by last click
-        /// With search and paging possibility
+        /// Generates a query based on current logged in user and search string, descending sorted by last click or creation date (depends on its null value)
+        /// This query will be executed by paginatedlist helper class
         /// </summary>
-        /// <param name="userId">Possibility to get list of other user instead of the current loggedin user</param>
-        public async Task<List<Link>> GetPaged(string search = "")
+        /// <param name="search"></param>
+        public IQueryable<Link> GetQuery(string search = "")
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var links = from l in _db.Links.Include(l => l.Clicks).Where(l => l.UserId == userId).OrderByDescending(l => l.LastClick) 
+            var links = from l in _db.Links.Include(l => l.Clicks).Where(l => l.UserId == userId).OrderByDescending(l => l.LastClick == null ? l.CreationDate : l.LastClick) 
                         select l;
 
             if (!String.IsNullOrEmpty(search))
             {
                 links = links.Where(l => l.Name.Contains(search) || l.Uri.Contains(search));
             }
-            return await links.ToListAsync();
+            return links.AsNoTracking();
+        }
+
+        /// <summary>
+        /// Override the default Get function to add Clicks to the object
+        /// </summary>
+        /// <param name="id"></param>
+        public override async Task<Link> Get(int id)
+        {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            Link link = await _db.Links.Include(l => l.Clicks).FirstOrDefaultAsync(l => l.Id == id);
+            if (link != null && link.UserId != userId)
+            {
+                return null;
+            };
+            return link;
         }
     }
 }

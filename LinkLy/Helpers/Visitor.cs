@@ -15,7 +15,7 @@ namespace LinkLy.Helpers
         }
 
         public IpInfo GetIpInfo(string ipNumber) {
-            IpInfo ipInfo = new IpInfo();
+            IpInfo ipInfo;
             try
             {
                 string uri = string.Format(_lookupUri, ipNumber);

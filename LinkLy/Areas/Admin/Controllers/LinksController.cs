@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LinkLy.Interfaces;
-using LinkLy.Models;
+using LinkLy.Models.DataModels;
 using Microsoft.AspNetCore.Authorization;
 using Linkly.Data.Repositories;
 using LinkLy.Models.ViewModels;
+using LinkLy.Helpers;
+using System.Linq;
 
 namespace LinkLy.Areas.Admin.Controllers
 {
@@ -15,16 +17,31 @@ namespace LinkLy.Areas.Admin.Controllers
         private readonly IShortner _shortner;
         private readonly LinkRepository _linkRepository;
         private readonly DomainRepository _domainRepository;
+        private readonly Defaults _defaults;
 
-        public LinksController(IShortner shortner, LinkRepository repository, DomainRepository domainRepository) {
+        public LinksController(IShortner shortner, LinkRepository repository, DomainRepository domainRepository, Defaults defaults) {
             _shortner = shortner;
             _linkRepository = repository;
             _domainRepository = domainRepository;
+            _defaults = defaults;
         }
 
-        public async Task<IActionResult> Index(LinksViewModel model)
+        public async Task<IActionResult> Index(LinksViewModel model, int? pageNumber, string search, string currentSearch)
         {
-            model.Links = await _linkRepository.GetPaged(model.Search);
+            if (search != null)
+            {
+                pageNumber = 1;
+            }
+            else {
+                search = currentSearch;
+            }
+            ViewData["CurrentSearch"] = search;
+
+            IQueryable<Link> query = _linkRepository.GetQuery(search);
+            PaginatedList<Link> paged = await PaginatedList<Link>.CreateAsync(query, pageNumber ?? 1, _defaults.PageSize);
+
+            model.Links = paged.Items;
+            model.Paged = paged;
             return View(model);
         }
 
@@ -35,6 +52,7 @@ namespace LinkLy.Areas.Admin.Controllers
                 Link = (id == 0 ? new Link() : await _linkRepository.Get(id)),
                 Domains = await _domainRepository.GetAllWithDefault()
             };
+            model.GenerateStatistics();
             
             return View(model);
         }
@@ -43,32 +61,33 @@ namespace LinkLy.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(LinkDetailsViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (model.Link.Id != 0) {
-                    Link link = await _linkRepository.Get(model.Link.Id);
-                    if (link == null) {
-                        return NotFound();
-                    }
-                    link.Domain = model.Link.Domain;
-                    link.Name = model.Link.Name;
-                    link.Uri = model.Link.Uri;
-                    await _linkRepository.Update(link);
-                    return RedirectToAction("Index");
-                }
-
-                await _linkRepository.Add(model.Link);
-                return RedirectToAction("Index");
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 LinkDetailsViewModel modelState = new LinkDetailsViewModel()
                 {
                     Link = model.Link,
                     Domains = await _domainRepository.GetAllWithDefault()
                 };
+                model.GenerateStatistics();
                 return View(modelState);
             }
+
+            if (model.Link.Id != 0)
+            {
+                Link link = await _linkRepository.Get(model.Link.Id);
+                if (link == null)
+                {
+                    return NotFound();
+                }
+                link.Domain = model.Link.Domain;
+                link.Name = model.Link.Name;
+                link.Uri = model.Link.Uri;
+                await _linkRepository.Update(link);
+                return RedirectToAction("Index");
+            }
+
+            await _linkRepository.Add(model.Link);
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(int id)

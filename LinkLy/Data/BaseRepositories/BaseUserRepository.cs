@@ -28,7 +28,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<TUserEntity> Add(TUserEntity entity)
+        public virtual async Task<TUserEntity> Add(TUserEntity entity)
         {
             entity.UserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             entity.CreationDate = DateTime.Now;
@@ -43,7 +43,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TUserEntity> Delete(int id)
+        public virtual async Task<TUserEntity> Delete(int id)
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var entity = await _db.Set<TUserEntity>().FindAsync(id);
@@ -64,7 +64,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TUserEntity> Get(int id)
+        public virtual async Task<TUserEntity> Get(int id)
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             TUserEntity entity = await _db.Set<TUserEntity>().FindAsync(id);
@@ -78,7 +78,7 @@ namespace LinkLy.Data.BaseRepositories
         /// Gets a list with entities owned by the current logged in user.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<TUserEntity>> GetAll()
+        public virtual async Task<List<TUserEntity>> GetAll()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return await _db.Set<TUserEntity>().Where(e => e.UserId == userId).ToListAsync();
@@ -90,7 +90,7 @@ namespace LinkLy.Data.BaseRepositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TUserEntity> Update(TUserEntity entity)
+        public virtual async Task<TUserEntity> Update(TUserEntity entity)
         {
             TUserEntity check = await Get(entity.Id);
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
