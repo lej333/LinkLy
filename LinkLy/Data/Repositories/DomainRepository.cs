@@ -39,8 +39,7 @@ namespace Linkly.Data.Repositories
                     UserId = userId,
                     Name = _defaults.Domain
                 };
-                _db.Domains.Add(domain);
-                await _db.SaveChangesAsync();
+                await Add(domain);
                 domains = await GetAll();
             };
             return domains;

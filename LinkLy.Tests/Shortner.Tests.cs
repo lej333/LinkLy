@@ -8,6 +8,9 @@ namespace LinkLy.Tests
     {
         private readonly string _alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
 
+        public ShortnerTests() { 
+        }
+
         [TestMethod]
         public void GenerateGuid()
         {

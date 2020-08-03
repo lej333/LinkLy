@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkLy.Helpers
 {
+    /// <summary>
+    /// Helper class to generate paged data based on generated query (see repositories).
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PaginatedList<T>
     {
         public int PageIndex { get; private set; }

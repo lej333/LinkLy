@@ -26,6 +26,7 @@ namespace LinkLy.Areas.Admin.Controllers
             _defaults = defaults;
         }
 
+        // GET
         public async Task<IActionResult> Index(LinksViewModel model, int? pageNumber, string search, string currentSearch)
         {
             if (search != null)
@@ -37,7 +38,7 @@ namespace LinkLy.Areas.Admin.Controllers
             }
             ViewData["CurrentSearch"] = search;
 
-            IQueryable<Link> query = _linkRepository.GetQuery(search);
+            IQueryable<Link> query = _linkRepository.GetAllQuery(search);
             PaginatedList<Link> paged = await PaginatedList<Link>.CreateAsync(query, pageNumber ?? 1, _defaults.PageSize);
 
             model.Links = paged.Items;

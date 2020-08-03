@@ -2,6 +2,9 @@
 
 namespace LinkLy.Models
 {
+    /// <summary>
+    /// Map model for ip info retrieved from external ipinfo website
+    /// </summary>
     public class IpInfo
     {
         [JsonProperty("ip")]

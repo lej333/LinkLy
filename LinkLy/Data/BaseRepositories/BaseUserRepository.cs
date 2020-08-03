@@ -9,6 +9,14 @@ using System.Linq;
 
 namespace LinkLy.Data.BaseRepositories
 {
+    /// <summary>
+    /// Abstract class with basic functions to run CRUD operations on the database
+    /// Implemented according to Repositories Pattern
+    /// Automatically fill up default properties before proceed to the database
+    /// Use this class when implenting a repository with relation to ASP.NET users
+    /// </summary>
+    /// <typeparam name="TUserEntity"></typeparam>
+    /// <typeparam name="TDb"></typeparam>
     public abstract class BaseUserRepository<TUserEntity, TDb> : IBaseUserRepository<TUserEntity>
         where TUserEntity : class, IUserEntity
         where TDb : ApplicationDbContext

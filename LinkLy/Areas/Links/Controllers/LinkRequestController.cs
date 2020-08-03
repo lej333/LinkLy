@@ -28,6 +28,13 @@ namespace LinkLy.Controllers
             _clickRepository = clickRepository;
         }
 
+        /// <summary>
+        /// Process link request
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        /// TODO: use LinkRepository instead of _db (needs a new function without ownership check)
         public async Task<IActionResult> Index(string guid, bool register = true)
         {
             if (guid == null) {

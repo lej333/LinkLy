@@ -6,6 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkLy.Data.BaseRepositories
 {
+    /// <summary>
+    /// Abstract class with basic functions to run CRUD operations on the database
+    /// Implemented according to Repositories Pattern
+    /// Automatically fill up default properties before proceed to the database
+    /// Use this class when implenting a repository without relation to ASP.NET users
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TDb"></typeparam>
     public abstract class BaseRepository<TEntity, TDb> : IBaseRepository<TEntity>
         where TEntity : class, IEntity
         where TDb : ApplicationDbContext

@@ -28,7 +28,7 @@ namespace Linkly.Data.Repositories
         /// This query will be executed by paginatedlist helper class
         /// </summary>
         /// <param name="search"></param>
-        public IQueryable<Link> GetQuery(string search = "")
+        public IQueryable<Link> GetAllQuery(string search = "")
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
