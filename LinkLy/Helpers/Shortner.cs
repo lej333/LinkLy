@@ -5,6 +5,9 @@ using System.Text;
 
 namespace LinkLy.Helpers
 {
+    /// <summary>
+    /// Helper class which generates short and easy to remember strings for links based on numeric id value
+    /// </summary>
     public class Shortner : IShortner
     {
         private string _alphabet = "";
