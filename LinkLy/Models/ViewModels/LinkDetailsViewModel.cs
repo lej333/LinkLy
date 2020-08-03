@@ -6,6 +6,10 @@ using System;
 
 namespace LinkLy.Models.ViewModels
 {
+    /// <summary>
+    /// Viewmodel created for details display of links
+    /// Calculates data for statistics based on Clicks object
+    /// </summary>
     public class LinkDetailsViewModel
     {
         public Link Link { get; set; }

@@ -6,6 +6,9 @@ using LinkLy.Interfaces;
 
 namespace LinkLy.Helpers
 {
+    /// <summary>
+    /// Helper class to retrieve information about ipnumber
+    /// </summary>
     public class Visitor : IVisitor
     {
         private readonly string _lookupUri = "";

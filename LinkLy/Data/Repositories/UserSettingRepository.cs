@@ -32,8 +32,7 @@ namespace Linkly.Data.Repositories
             if (userSetting == null)
             {
                 userSetting = new UserSetting();
-                _db.UserSettings.Add(userSetting);
-                await _db.SaveChangesAsync();
+                await Add(userSetting);
                 userSetting = await _db.UserSettings.FirstOrDefaultAsync(s => s.UserId == userId);
             }
             return userSetting;

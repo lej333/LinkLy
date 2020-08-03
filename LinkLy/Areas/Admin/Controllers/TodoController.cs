@@ -5,6 +5,9 @@ using LinkLy.Models;
 
 namespace LinkLy.Areas.Admin.Controllers
 {
+    /// <summary>
+    /// Temporary controller for modules which are not built yet (placeholder)
+    /// </summary>
     [Authorize]
     [Area("Admin")]
     public class TodoController : Controller
