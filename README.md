@@ -1,7 +1,5 @@
 # LinkLy
 LinkLy is built to give you a possibility to self-host a link shortner application. 
-- You can create multiple user accounts for your own customers.
-- You can assign customer domains as base links (branded links).
 
 This application is built with ASP.NET Core, so you can run this application on multiple platforms ie Linux and Windows. The SQL Server is currently the only supported database server to run this application. The support for other rational database servers will be added in the future versions.
 
@@ -27,6 +25,8 @@ Change the following default in appsettings.config with your base domain name. T
 `"Defaults": { "Domain": "{{your base domain}}" }`
 
 ### Features in the future versions
+- Domain management
+- Users management (for admins)
 - Support for Docker
 - Support for Azure
 - Support for MySQL, PostGreSQL, and MariaDB
