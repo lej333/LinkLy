@@ -31,59 +31,58 @@
     @if (Model.Links.Count() != 0)
     {
         <div class="bg-white mt-2 shadow">
-            <table class="table table-striped border mb-0">
                 @foreach (var item in Model.Links)
                 {
-                    <tr>
-                        <td>
-                            <div class="p-1">
-                                <div>
-                                    <div class="text-nowrap float-left">
-                                        @Html.DisplayFor(m => item.Name)
-                                    </div>
-                                    <div class="float-left ml-2">
-                                        <div class="float-left">
-                                            <a asp-action="Details" asp-route-id="@item.Id" title="Edit link" class="text-info">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </div>
-                                        <div class="float-left ml-1">
-                                            <a asp-action="Delete" asp-route-id="@item.Id" title="Delete link" class="text-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
+                    
+                    <div class="pl-4 pr-4 pt-4 pb-2 border m-0 border-bottom-0">
 
-                                <div class="overflow-hidden text-nowrap">
-                                    <a href="@item.Uri" target="_blank" class="text-gray-900">
-                                        @item.Uri
-                                    </a>
-                                </div>
-
-                                <div>
-                                    <a asp-area="Links" asp-action="Index" asp-controller="LinkRequest" asp-route-guid="@shortner.GenerateGuid(item.Id)" asp-route-register="false" target="_blank" class="text-info">
-                                        @item.Domain/l/@shortner.GenerateGuid(item.Id)
-                                    </a>
-                                </div>
-
-                                <div class="text-gray-500 small">
-                                    <span title="@item.CreationDate.ToString("dd-MM-yyyy HH:mm")">Creation: <b>@item.CreationDate.ToString("d MMM")</b></span>
-                                    @if (item.LastClick != null)
-                                    {
-                                        <div>
-                                            <span title="@item.LastClick.GetValueOrDefault().ToString("dd-MM-yyyy HH:mm")">Last click: <b>@item.LastClick.GetValueOrDefault().ToString("d MMM")</b></span>
-                                            Clicks: total: <b>@item.Clicks.Count()</b>, past year: <b>@Model.CalculateClicks(365, item.Clicks)</b>, past month: <b>@Model.CalculateClicks(31, item.Clicks)</b>, past day: <b>@Model.CalculateClicks(1, item.Clicks)</b>
-                                        </div>
-                                    }
-                                </div>
+                        <div>
+                            <div class="text-nowrap float-left">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="text-gray-700">
+                                    @Html.DisplayFor(m => item.Name)
+                                </a>
                             </div>
-                        </td>
-                    </tr>
+                            <div class="float-right">
+                                <div class="float-left">
+                                    <a asp-action="Details" asp-route-id="@item.Id" title="Edit link" class="text-info text-lg">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                                <div class="float-left ml-1">
+                                    <a asp-action="Delete" asp-route-id="@item.Id" title="Delete link" class="text-danger text-lg">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="overflow-hidden text-nowrap">
+                            <a href="@item.Uri" target="_blank" class="text-gray-900">
+                                @item.Uri
+                            </a>
+                        </div>
+
+                        <div>
+                            <a asp-area="Links" asp-action="Index" asp-controller="LinkRequest" asp-route-guid="@shortner.GenerateGuid(item.Id)" asp-route-register="false" target="_blank" class="text-info">
+                                @item.Domain/l/@shortner.GenerateGuid(item.Id)
+                            </a>
+                        </div>
+
+                        <div class="text-gray-500 small text-right">
+                            <span title="@item.CreationDate.ToString("dd-MM-yyyy HH:mm")" class="text-monospace text-uppercase small">Creation</span> <b title="@item.CreationDate.ToString("dd-MM-yyyy HH:mm")">@item.CreationDate.ToString("d MMM")</b>
+                            @if (item.LastClick != null)
+                            {
+                                <span class="text-monospace text-uppercase small">&nbsp;&nbsp;last click</span> <b>@item.LastClick.GetValueOrDefault().ToString("d MMM")</b>
+                                <span class="text-monospace text-uppercase small">&nbsp;&nbsp;clicks</span> <b>@item.Clicks.Count()</b>
+                            }
+                        </div>
+
+                    </div>
+                      
                 }
-            </table>
+      
         </div>
         <div>
 
@@ -92,7 +91,7 @@
                 string nextDisabled = !Model.Paged.HasNextPage ? "disabled" : "";
             }
 
-            <div class="float-right mt-2">
+            <div class="float-right mt-3">
                 <a asp-action="Index"
                    asp-route-pageNumber="@(Model.Paged.PageIndex - 1)"
                    asp-route-currentSearch="@ViewData["CurrentSearch"]"
