@@ -26,6 +26,8 @@ namespace LinkLy.Models.ViewModels
         public string BrowsersValues { get; set; }
         public string ClicksLabels { get; set; }
         public string ClicksValues { get; set; }
+        public string OSLabels { get; set; }
+        public string OSValues { get; set; }
 
         /// <summary>
         /// Generates statistics based on Clicks list object
@@ -48,6 +50,10 @@ namespace LinkLy.Models.ViewModels
             List<StatisticsItem> browsers = Link.Clicks.GroupBy(l => l.BrowserName).Select(l => new StatisticsItem { Name = l.Key, Count = l.Count() }).OrderBy(l => l.Name).ToList();
             BrowsersLabels = JsonConvert.SerializeObject(browsers.Select(c => c.Name).ToList());
             BrowsersValues = JsonConvert.SerializeObject(browsers.Select(c => c.Count).ToList());
+
+            List<StatisticsItem> OS = Link.Clicks.GroupBy(l => l.OSName).Select(l => new StatisticsItem { Name = l.Key, Count = l.Count() }).OrderBy(l => l.Name).ToList();
+            OSLabels = JsonConvert.SerializeObject(OS.Select(c => c.Name).ToList());
+            OSValues = JsonConvert.SerializeObject(OS.Select(c => c.Count).ToList());
 
             var clicks = from month in Enumerable.Range(0, 12)
                 let key = new { DateTime.Now.AddMonths(-month).Year, DateTime.Now.AddMonths(-month).Month }

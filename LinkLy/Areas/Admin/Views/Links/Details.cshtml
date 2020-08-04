@@ -3,14 +3,13 @@
 
     <div class="container">
 
-        <div>
-            <div class="float-left">
-                <h2 class="text-info">Link</h2>
+        <div class="row">
+            <div class="col">
+                <h2 class="text-info text-nowrap overflow-hidden">@(Model.Link.Id > 0 ? Model.Link.Name : "Link")</h2>
             </div>
-            <div class="float-right">
+            <div class="col-auto">
                 <partial name="_BackButtonPartial" />
             </div>
-            <div class="clearfix"></div>
         </div>
 
         <div class="row mt-1">
@@ -61,7 +60,7 @@
                 </div>
 
                 @if (Model.Link.Id > 0)
-                { 
+                {
                     <!-- Months area chart -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -83,41 +82,6 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <!-- Total clicks label -->
-                        <div class="col-xl-6">
-                            <div class="card shadow py-2 mb-4">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total clicks</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Link.Clicks.Count</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-link fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Last click date label -->
-                        <div class="col-xl-6">
-                            <div class="card shadow py-2 mb-4">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Last click</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Link.LastClick == null ? "Not clicked yet" : Model.Link.LastClick.GetValueOrDefault().ToString("d MMM yyyy HH:mm"))</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 }
 
             </div>
@@ -125,52 +89,6 @@
             @if (Model.Link.Id > 0)
             {
                 <div class="col-xl-4 mb-4">
-
-                    <!-- Countries chart -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-gray-800">Countries</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                @if (Model.CountriesValues == "[]")
-                                {
-                                    <div class="text-gray-500">
-                                        There are no data available yet
-                                    </div>
-                                }
-                                else 
-                                { 
-                                    <div class="chart-pie">
-                                        <canvas id="chartCountries"></canvas>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Device Types chart -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-gray-800">Devices</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                @if (Model.DeviceTypesValues == "[]")
-                                {
-                                    <div class="text-gray-500">
-                                        There are no data available yet
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="chart-pie">
-                                        <canvas id="chartDeviceTypes"></canvas>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Browsers chart -->
                     <div class="card shadow mb-4">
@@ -194,10 +112,129 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Total clicks label -->
+                    <div class="card shadow py-2 mb-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total clicks</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Link.Clicks.Count</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-link fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Last click date label -->
+                    <div class="card shadow py-2 mb-4">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Last click</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@(Model.Link.LastClick == null ? "Not clicked yet" : Model.Link.LastClick.GetValueOrDefault().ToString("d MMM yyyy HH:mm"))</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
             }
 
         </div>
+
+        @if (Model.Link.Id > 0)
+        {
+            <div class="row">
+
+                <div class="col-xl-4">
+
+                    <!-- Countries chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Countries</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.CountriesValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="chart-pie">
+                                        <canvas id="chartCountries"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-xl-4">
+                    <!-- Device Types chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">Devices</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.DeviceTypesValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="chart-pie">
+                                        <canvas id="chartDeviceTypes"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+
+                    <!-- OS chart -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-gray-800">OS</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                @if (Model.OSValues == "[]")
+                                {
+                                    <div class="text-gray-500">
+                                        There are no data available yet
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="chart-pie">
+                                        <canvas id="chartOS"></canvas>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
 
     </div>
 
@@ -268,6 +305,21 @@
                 labels: @Html.Raw(Model.BrowsersLabels),
                 datasets: [{
                     data: @Html.Raw(Model.BrowsersValues),
+                    backgroundColor: backgroundColors,
+                    hoverBackgroundColor: hoverBackgroundColors,
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: options,
+        });
+
+        var cOS = document.getElementById("chartOS");
+        new Chart(cOS, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Model.OSLabels),
+                datasets: [{
+                    data: @Html.Raw(Model.OSValues),
                     backgroundColor: backgroundColors,
                     hoverBackgroundColor: hoverBackgroundColors,
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
